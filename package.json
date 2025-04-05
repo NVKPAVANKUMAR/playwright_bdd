@@ -1,0 +1,17 @@
+{
+  "name": "playwright-bdd-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx bddgen && npx playwright test --project=chromium"
+  },
+  "keywords": [],
+  "author": "NVK PAVANKUMAR",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@cucumber/cucumber": "^11.2.0",
+    "@playwright/test": "^1.51.1",
+    "playwright-bdd": "^8.2.1"
+  }
+}
