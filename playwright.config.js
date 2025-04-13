@@ -1,8 +1,8 @@
-const { devices} = require("@playwright/test");
+const { devices } = require("@playwright/test");
 const { defineBddConfig, cucumberReporter } = require("playwright-bdd");
 
 const bddConfig = defineBddConfig({
-  paths: ["features/login.feature"], // Where your feature files are
+  paths: ["features/*.feature"], // Where your feature files are
   steps: ["fixtures/fixtures.js", "steps/*.js"], // Path to your step definitions
   tags: "@login",
 });
@@ -10,9 +10,14 @@ const bddConfig = defineBddConfig({
 module.exports = {
   testDir: bddConfig, // Where feature files are located
   fullyParallel: true,
-  workers: 2,
+  workers: 4,
   use: {
+    connectOptions: {
+      wsEndpoint: 'ws://127.0.0.1:4444/',
+      timeout: 60000,
+    },
     video: "on",
+    screenshot: 'only-on-failure',
     headless: !!process.env.CI, // Runs headless if in CI, otherwise headed,
     baseURL:
       "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login", // Base URL for navigation

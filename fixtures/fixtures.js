@@ -1,10 +1,23 @@
 const { test: bddTest } = require("playwright-bdd");
 const { LoginPage } = require("../pages/loginPage");
-const { DashboardPage } = require('../pages/dashboardPage');
+const { DashboardPage } = require("../pages/dashboardPage");
 const { PlaywrightPage } = require("../pages/playwrightPage");
 const { GetStartedPage } = require("../pages/getStartedPage");
 
-const test = bddTest.extend({
+// Define the base test with connection to remote browser
+const baseBddTest = bddTest.extend({
+  // Override the default browser launcher to use the MCP server
+  browser: async ({ playwright }, use) => {
+    // Connect to the remote browser using the WebSocket endpoint
+    const wsEndpoint =
+      process.env.PW_TEST_CONNECT_WS_ENDPOINT || "ws://localhost:4444/";
+    const browser = await playwright.chromium.connect({ wsEndpoint });
+    await use(browser);
+    await browser.close();
+  },
+});
+
+const test = baseBddTest.extend({
   loggedInPage: [
     async ({ page }, use) => {
       const loginPage = new LoginPage(page);

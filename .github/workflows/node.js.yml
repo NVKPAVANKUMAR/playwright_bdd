@@ -26,7 +26,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run : npx playwright install
-    - run: npm test
+    - name: Install dependencies
+      run: npm ci
+    - name: Build the project (if applicable)
+      run: npm run build --if-present
+    - name: Install Playwright browsers
+      run: npx playwright install
+    - name: Start Playwright server
+      run: npx playwright run-server --port=4444 &
+      env:
+        PW_TEST_CONNECT_WS_ENDPOINT: ws://localhost:4444/
+    - name: Wait for Playwright server to start
+      run: sleep 5
+    - name: Run tests
+      run: npm test
